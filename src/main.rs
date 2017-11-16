@@ -37,6 +37,10 @@ impl Timer {
 }
 
 fn main() {
+    use sdl2::image::LoadTexture;
+    use sdl2::pixels::Color;
+    use std::path::Path;
+
     // Initialize the SDL2 library.
     let sdl_context = sdl2::init().expect("Failed to initialize SDL2 context");
     // Initialize the SDL2 video subsystem.
@@ -49,6 +53,18 @@ fn main() {
         .position_centered()
         .build()
         .expect("Failed to create SDL2 window");
+
+    // Initialize a window-based renderer.
+    let mut canvas = window.into_canvas().build()
+        .expect("Failed to initialize renderer.");
+    // Set the draw color for the canvas.
+    canvas.set_draw_color(Color::RGB(255, 0, 0));
+
+    // Create and load a texture.
+    let texture_path = Path::new("./assets/textures/game_scene/block.png");
+    let texture_creator = canvas.texture_creator();
+    let texture = texture_creator.load_texture(texture_path)
+        .expect("Failed to load texture");
 
     // Obtain the SDL2 event pump.
     let mut event_pump = sdl_context.event_pump()
@@ -75,7 +91,14 @@ fn main() {
         }
 
         // Logic
+
         // Rendering
+        // Clear the current rendering target with the drawing color.
+        canvas.clear();
+        // Copy the texture to the screen.
+        canvas.copy(&texture, None, None).expect("Failed to render texture");
+        // Display the composed backbuffer to the screen.
+        canvas.present();
 
         // Delay the rendering of the next frame to match the required tick
         // rate.
