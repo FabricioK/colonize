@@ -41,22 +41,8 @@ fn main() {
     use sdl2::pixels::Color;
     use std::path::Path;
 
-    // Initialize the SDL2 library.
-    let sdl_context = sdl2::init().expect("Failed to initialize SDL2 context");
-    // Initialize the SDL2 video subsystem.
-    let video_subsystem = sdl_context.video()
-        .expect("Failed to initialize SDL2 video subsystem");
+    let (sdl_context, mut canvas) = init();
 
-    // Create an SDL2 window.
-    let window = video_subsystem
-        .window(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT)
-        .position_centered()
-        .build()
-        .expect("Failed to create SDL2 window");
-
-    // Initialize a window-based renderer.
-    let mut canvas = window.into_canvas().build()
-        .expect("Failed to initialize renderer.");
     // Set the draw color for the canvas.
     canvas.set_draw_color(Color::RGB(255, 0, 0));
 
@@ -64,11 +50,11 @@ fn main() {
     let texture_path = Path::new("./assets/textures/game_scene/block.png");
     let texture_creator = canvas.texture_creator();
     let texture = texture_creator.load_texture(texture_path)
-        .expect("Failed to load texture");
+        .unwrap_or_else(|err| panic!("Failed to load texture: {}", err));
 
     // Obtain the SDL2 event pump.
     let mut event_pump = sdl_context.event_pump()
-        .expect("Failed to obtain SDL2 event pump");
+        .unwrap_or_else(|err| panic!("Failed to obtain SDL2 event pump: {}", err));
 
     // Create a timer which will be used to time the interval between frames.
     let mut fps_timer = Timer::new();
@@ -96,7 +82,8 @@ fn main() {
         // Clear the current rendering target with the drawing color.
         canvas.clear();
         // Copy the texture to the screen.
-        canvas.copy(&texture, None, None).expect("Failed to render texture");
+        canvas.copy(&texture, None, None)
+            .unwrap_or_else(|err| panic!("Failed to render texture: {}", err));
         // Display the composed backbuffer to the screen.
         canvas.present();
 
@@ -105,4 +92,26 @@ fn main() {
         while fps_timer.get_ticks() < 1000 / FRAMES_PER_SECOND {}
         println!("Elapsed ticks: {}", fps_timer.get_ticks());
     }
+}
+
+fn init() -> (sdl2::Sdl, sdl2::render::Canvas<sdl2::video::Window>) {
+    // Initialize the SDL2 library.
+    let sdl_context = sdl2::init().unwrap_or_else(
+        |err| panic!("Failed to initialize SDL2 context: {}", err));
+    // Initialize the SDL2 video subsystem.
+    let video_subsystem = sdl_context.video().unwrap_or_else(
+        |err| panic!("Failed to initialize SDL2 video subsystem: {}", err));
+
+    // Create an SDL2 window.
+    let window = video_subsystem
+        .window(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT)
+        .position_centered()
+        .build()
+        .unwrap_or_else(|err| panic!("Failed to create SDL2 window: {}", err));
+
+    // Initialize a window-based renderer.
+    let canvas = window.into_canvas().build()
+        .unwrap_or_else(|err| panic!("Failed to initialize renderer: {}", err));
+
+    (sdl_context, canvas)
 }
