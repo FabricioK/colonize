@@ -7,9 +7,7 @@
     </tr>
     <tr>
         <td colspan="2">
-            <a href="https://indiv0.github.io/colonize/colonize" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
             <img src="https://img.shields.io/badge/license-MIT%2FApache--2.0-blue.svg" alt=license"></img>
-            <a href="https://coveralls.io/github/indiv0/colonize?branch=master" title="Coverage Status"><img src="https://coveralls.io/repos/github/indiv0/colonize/badge.svg?branch=master" alt="coveralls-badge"></img></a>
         </td>
     </tr>
 </table>
@@ -22,142 +20,75 @@ A Dwarf-Fortress/Rimworld-like game written in Rust.
 
 # Table of Contents
 
+* [Introduction](#introduction)
 * [Platforms & Tool Chains](#platforms--tool-chains)
-* [Running Precompiled Binaries](#running-precompiled-binaries)
 * [Compiling & Running From Source](#compiling--running-from-source)
 * [Configuration](#configuration)
 * [Contributing](#contributing)
 * [License](#license)
 
+# Introduction
+
+Colonize is a project of [mine](https://github.com/indiv0) to write a Dwarf
+Fortress/Rimworld-like game in the Rust language.
+
+My eventual vision is for this game to provide a real-time simulation of a world
+in which individual entities (like dwarves in Dwarf Fortress) perform actions to
+satisfy goals set by the player (e.g. "build a house").
+The gameplay will focus on getting a player to build a fort/base and protect it
+from threats, whether they be the elements, monsters, or various catastrophes.
+For now, the game is intended to be single-player only, but I may attempt to add
+multi-player co-op or challenge mode in the future.
+
+I have written a few toy games here and there but this is my first project where
+I intend to make a fully playable, enjoyable game from scratch.
+As such, this project is developed at a very slow rate as I am learning game
+programming and design as I go along.
+
+The game will initially be developed to only support a top-down, layered view of
+a world which is generated and rendered in chunks.
+The project uses the SDL2 library to provide graphics/input/etc. capability.
+
+## Note
+
+**THIS PROJECT IS CURRENTLY UNDERGOING A FULL RE-WRITE**.
+With the deprecation of the [glium][glium] library, this project is currently
+undergoing a full re-write from scratch.
+
 # Platforms & Tool Chains
 
-`Colonize` should be compilable on any of the major rustc tool chains (stable, beta, or nightly).
+`Colonize` should be compilable on any of the major rustc tool chains (stable,
+beta, or nightly).
 
-In the long run, `Colonize` intends to support all major platforms (Windows/Mac OS X/Linux, 32-bit+64 bit). However, at the moment, I can only afford to prioritize one or two platforms at a time. For the rest, I will attempt to set up automated builds to at least ensure that the project compiles on the other platforms.
+In the long run, `Colonize` intends to support all major platforms
+(Windows/Mac OS X/Linux, 32-bit+64 bit).
+However, at the moment, I can only afford to prioritize one or two platforms at
+a time.
+As such, **currently the game is now only actively developed and tested on
+64-bit Linux**.
+I may setup automated builds for other platforms in the future.
+Contributors from all platforms are welcome, regardless of officially stated
+platform support.
 
-If you wish to help test or debug the game on any platform, please let me know! Your help would be greatly appreciated.
-
-Both tool chain support and target support can be tracked at a glance via the [Travis CI](https://travis-ci.org/indiv0/colonize) page for the project.
-
-Further information regarding the status of support for specific platforms can be found on the project's [issues](https://github.com/indiv0/colonize/issues) page.
-
-A quick overview of the platforms and their status can be found below:
-
-<table>
-    <thead>
-        <td>Target</td>
-        <td>Confirmed Working</td>
-        <td><a href="https://travis-ci.org/indiv0/colonize" title="Travis Build Status">Automated Travis/Appveyor Builds</a></td>
-        <td><a href="https://github.com/indiv0/colonize/releases/latest" title="Latest release">Automated Deployment</a></td>
-        <td>Notes</td>
-    </thead>
-    <tr>
-        <td>i686-unknown-linux-gnu</td>
-        <td>✓</td>
-        <td>✓</td>
-        <td>✓ (missing assets)</td>
-        <td>32-bit Linux (2.6.18+)</td>
-    </tr>
-    <tr>
-        <td>x86_64-unknown-linux-gnu</td>
-        <td>✓</td>
-        <td>✓</td>
-        <td>✓ (missing assets)</td>
-        <td>64-bit Linux (2.6.18+)</td>
-    </tr>
-    <tr>
-        <td>i686-pc-windows-gnu</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>32-bit MinGW (Windows 7+)</td>
-    </tr>
-    <tr>
-        <td>x86_64-pc-windows-gnu</td>
-        <td>✓</td>
-        <td></td>
-        <td></td>
-        <td>64-bit MinGW (Windows 7+)</td>
-    </tr>
-    <tr>
-        <td>i686-apple-darwin</td>
-        <td></td>
-        <td>(currently broken)</td>
-        <td></td>
-        <td>32-bit OSX (10.7+, Lion+)</td>
-    </tr>
-    <tr>
-        <td>x86_64-apple-darwin</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>64-bit OSX (10.7+, Lion+)</td>
-    </tr>
-    <tr>
-        <td>x86_64-unknown-linux-musl</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>64-bit Linux with MUSL</td>
-    </tr>
-</table>
-
-
-## Running Precompiled Binaries
-
-Pre-compiled binaries for each of the major targets can be found on the releases
-page, [here][latest-release].
+If you wish to help test or debug the game on any platform, please let me know!
+Your help would be greatly appreciated.
 
 ## Compiling & Running From Source
-### Prerequisites
+
+Prerequisites:
 
 * [rust](https://www.rust-lang.org)
 
-### Compiling
+Steps:
 
-Compiling on Rustc stable:
-
-```sh
-cargo build
-```
-
-Compiling on Rustc nightly:
-
-```sh
-cargo build --no-default-features --features nightly
-```
-
-### Running
-
-Running on Rustc stable:
-
-```sh
-cargo run
-```
-
-Running on Rustc nightly:
-
-```sh
-cargo run --no-default-features --features nightly
-```
-
-## Configuration
-
-Currently, the `Config` struct holds all the configurable values for Colonize.
-This struct and further information on its usage can be found [here][config.in.rs].
-
-When running Colonize, the game first attempts to load the configuration from a
-`colonize.json` file in the game's directory. If no such file is found, it falls
-back to the specified defaults. An example `colonize.json` file can be found at
-the root of this repo as [`colonize.json.example`][colonize-json-example].
-
-In the future, the capability to define the config directory might be added.
+1. Compile the project with `cargo build`.
+2. Run the game with `cargo run`.
 
 ## Contributing
 
 Contributions are always welcome!
 If you have an idea for something to add (code, documentation, tests, examples,
-etc.) fell free to give it a shot.
+etc.) feel free to give it a shot.
 
 Please read [CONTRIBUTING.md][contributing] before you start contributing.
 
@@ -174,10 +105,8 @@ The list of contributors to this project can be found at
 [CONTRIBUTORS.md][contributors].
 
 [changelog]: https://github.com/indiv0/colonize/blob/master/CHANGELOG.md
-[colonize-json-example]: https://github.com/indiv0/colonize/blob/master/colonize.json.example "Example configuration"
-[config.in.rs]: https://github.com/indiv0/colonize/blob/master/src/config.in.rs "config.in.rs"
 [contributing]: https://github.com/indiv0/colonize/blob/master/CONTRIBUTING.md "Contribution guide"
 [contributors]: https://github.com/indiv0/colonize/blob/master/CONTRIBUTORS.md "List of contributors"
-[latest-release]: https://github.com/indiv0/colonize/releases/latest "Latest release"
+[glium]: https://users.rust-lang.org/t/glium-post-mortem/7063 "Glium deprecation post"
 [license-apache]: https://github.com/indiv0/colonize/blob/master/LICENSE-APACHE "Apache-2.0 License"
 [license-mit]: https://github.com/indiv0/colonize/blob/master/LICENSE-MIT "MIT License"

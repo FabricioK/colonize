@@ -12,77 +12,12 @@ keywords = [
     "dwarf",
     "fortress",
     "rimworld",
-    "piston",
-    "opengl",
-    "glutin",
-    "glium",
 ]
 license = "MIT/Apache-2.0"
-build = "build.rs"
 
 [[bin]]
 
 name = "colonize"
 
-[build-dependencies.serde_codegen]
-optional = true
-version = "0.7.5"
-
-[build-dependencies.syntex]
-optional = true
-version = "0.32.0"
-
 [dependencies]
-cgmath = "0.9.1"
-fps_counter = "0.2.0"
-glium = "0.14.0"
-image = "0.10.0"
-piston = "0.22.1"
-piston2d-glium_graphics = "0.25.0"
-serde = "0.7.5"
-serde_json = "0.7.0"
-shader_version = "0.2.1"
-time = "0.1.35"
-
-[dependencies.clippy]
-optional = true
-version = "0.0"
-
-[dependencies.colonize_utility]
-path = "utility"
-version = "0.0.1"
-
-[dependencies.colonize_world]
-default-features = false
-path = "world"
-version = "0.0.1"
-
-[dependencies.rgframework]
-default-features = false
-path = "framework"
-version = "0.0.1"
-
-[dependencies.serde_macros]
-optional = true
-version = "0.7.5"
-
-[features]
-default = ["with-syntex"]
-nightly = [
-    "colonize_world/nightly",
-    "rgframework/nightly",
-    "serde_macros",
-]
-nightly-testing = [
-    "colonize_utility/nightly-testing",
-    "colonize_world/nightly-testing",
-    "clippy",
-    "nightly",
-    "rgframework/nightly-testing",
-]
-with-syntex = [
-    "colonize_world/with-syntex",
-    "rgframework/with-syntex",
-    "serde_codegen",
-    "syntex"
-]
+clippy = { version = "*", optional = true }
