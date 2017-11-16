@@ -79,13 +79,7 @@ fn main() {
         // Logic
 
         // Rendering
-        // Clear the current rendering target with the drawing color.
-        canvas.clear();
-        // Copy the texture to the screen.
-        canvas.copy(&texture, None, None)
-            .unwrap_or_else(|err| panic!("Failed to render texture: {}", err));
-        // Display the composed backbuffer to the screen.
-        canvas.present();
+        render(&mut canvas, &texture);
 
         // Delay the rendering of the next frame to match the required tick
         // rate.
@@ -114,4 +108,15 @@ fn init() -> (sdl2::Sdl, sdl2::render::Canvas<sdl2::video::Window>) {
         .unwrap_or_else(|err| panic!("Failed to initialize renderer: {}", err));
 
     (sdl_context, canvas)
+}
+
+fn render(canvas: &mut sdl2::render::Canvas<sdl2::video::Window>,
+          texture: &sdl2::render::Texture) {
+    // Clear the current rendering target with the drawing color.
+    canvas.clear();
+    // Copy the texture to the screen.
+    canvas.copy(texture, None, None)
+        .unwrap_or_else(|err| panic!("Failed to render texture: {}", err));
+    // Display the composed backbuffer to the screen.
+    canvas.present();
 }
