@@ -4,6 +4,10 @@
 extern crate sdl2;
 extern crate time;
 
+use sdl2::render::{Canvas, Texture};
+use sdl2::video::Window;
+use std::path::Path;
+
 // The target FPS to render at.
 const FRAMES_PER_SECOND: u64 = 60;
 
@@ -37,20 +41,15 @@ impl Timer {
 }
 
 fn main() {
-    use sdl2::image::LoadTexture;
     use sdl2::pixels::Color;
-    use std::path::Path;
 
     let (sdl_context, mut canvas) = init();
 
     // Set the draw color for the canvas.
     canvas.set_draw_color(Color::RGB(255, 0, 0));
 
-    // Create and load a texture.
-    let texture_path = Path::new("./assets/textures/game_scene/block.png");
     let texture_creator = canvas.texture_creator();
-    let texture = texture_creator.load_texture(texture_path)
-        .unwrap_or_else(|err| panic!("Failed to load texture: {}", err));
+    let textures = load_textures(&texture_creator);
 
     // Obtain the SDL2 event pump.
     let mut event_pump = sdl_context.event_pump()
@@ -79,7 +78,7 @@ fn main() {
         // Logic
 
         // Rendering
-        render(&mut canvas, &texture);
+        render(&mut canvas, &textures[0]);
 
         // Delay the rendering of the next frame to match the required tick
         // rate.
@@ -88,7 +87,7 @@ fn main() {
     }
 }
 
-fn init() -> (sdl2::Sdl, sdl2::render::Canvas<sdl2::video::Window>) {
+fn init() -> (sdl2::Sdl, Canvas<Window>) {
     // Initialize the SDL2 library.
     let sdl_context = sdl2::init().unwrap_or_else(
         |err| panic!("Failed to initialize SDL2 context: {}", err));
@@ -110,8 +109,22 @@ fn init() -> (sdl2::Sdl, sdl2::render::Canvas<sdl2::video::Window>) {
     (sdl_context, canvas)
 }
 
-fn render(canvas: &mut sdl2::render::Canvas<sdl2::video::Window>,
-          texture: &sdl2::render::Texture) {
+fn load_textures<'a>(texture_creator: &'a sdl2::render::TextureCreator<sdl2::video::WindowContext>) -> Vec<Texture<'a>> {
+    use sdl2::image::LoadTexture;
+
+    // Initialize the vector which will hold our list of textures.
+    let mut textures = Vec::new();
+
+    // Load a texture.
+    let texture_path = Path::new("./assets/textures/game_scene/block.png");
+    let texture = texture_creator.load_texture(texture_path)
+        .unwrap_or_else(|err| panic!("Failed to load texture: {}", err));
+    textures.push(texture);
+
+    textures
+}
+
+fn render(canvas: &mut Canvas<Window>, texture: &Texture) {
     // Clear the current rendering target with the drawing color.
     canvas.clear();
     // Copy the texture to the screen.
