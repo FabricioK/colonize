@@ -1,6 +1,9 @@
 #![cfg_attr(feature = "clippy", feature(plugin))]
 #![cfg_attr(feature = "clippy", plugin(clippy))]
 
+extern crate env_logger;
+#[macro_use]
+extern crate log;
 extern crate sdl2;
 extern crate time;
 
@@ -43,6 +46,10 @@ impl Timer {
 fn main() {
     use sdl2::pixels::Color;
 
+    // Initialize the logger.
+    env_logger::init()
+        .unwrap_or_else(|err| panic!("Failed to initialize the logger: {}", err));
+
     let (sdl_context, mut canvas) = init();
 
     // Set the draw color for the canvas.
@@ -66,7 +73,7 @@ fn main() {
         for event in event_pump.poll_iter() {
             use sdl2::event::Event;
             use sdl2::keyboard::Keycode;
-            println!("SDL2 event: {:?}", event);
+            debug!("SDL2 event: {:?}", event);
             match event {
                 Event::Quit { .. } |
                     Event::KeyDown { keycode: Some(Keycode::Escape), .. } |
@@ -83,7 +90,7 @@ fn main() {
         // Delay the rendering of the next frame to match the required tick
         // rate.
         while fps_timer.get_ticks() < 1000 / FRAMES_PER_SECOND {}
-        println!("Elapsed ticks: {}", fps_timer.get_ticks());
+        trace!("Elapsed ticks: {}", fps_timer.get_ticks());
     }
 }
 
