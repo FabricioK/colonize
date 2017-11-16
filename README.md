@@ -78,6 +78,8 @@ Your help would be greatly appreciated.
 Prerequisites:
 
 * [rust](https://www.rust-lang.org)
+* [sdl2](https://www.archlinux.org/packages/extra/x86_64/sdl2/)
+* [sdl2_image](https://www.archlinux.org/packages/extra/x86_64/sdl2_image/)
 
 Steps:
 
