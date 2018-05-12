@@ -47,8 +47,7 @@ fn main() {
     use sdl2::pixels::Color;
 
     // Initialize the logger.
-    env_logger::init()
-        .unwrap_or_else(|err| panic!("Failed to initialize the logger: {}", err));
+    env_logger::init();
 
     let (sdl_context, mut canvas) = init();
 
